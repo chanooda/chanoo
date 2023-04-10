@@ -1,5 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalEnv": ["VITE_API_URL", "REACT_APP__API_URL"],
   "globalDependencies": ["**/.env.*local"],
   "pipeline": {
     "build": {
@@ -12,5 +13,8 @@
     "dev": {
       "cache": false
     }
+  },
+  "remoteCache": {
+    "signature": true
   }
 }
