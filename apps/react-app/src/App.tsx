@@ -1,15 +1,10 @@
-import './App.css';
-import { useData } from 'chanoo-react-query';
-import { testApi } from './api/testApi';
+import { Button, globalStyles } from 'chanoo-ui';
 
 function App() {
-  const { data } = useData(['testApi', undefined], testApi);
-
+  globalStyles();
   return (
     <div>
-      {(data as any)?.map((el: any) => (
-        <p key={el.id}>{el?.title}</p>
-      ))}
+      <Button>김찬우</Button>
     </div>
   );
 }
