@@ -1,6 +1,7 @@
 {
   "name": "tsconfig",
   "version": "0.0.0",
+  "main": "src/index.ts",
   "private": true,
   "files": [
     "base.json",

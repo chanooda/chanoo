@@ -1,10 +1,10 @@
-import { Button } from 'ui';
+import { Text } from 'chanoo-ui';
 
 export default function Web() {
   return (
     <div>
       <h1>Web</h1>
-      <Button />
+      <Text css={{ mt: '$12' }}>김찬우</Text>
     </div>
   );
 }

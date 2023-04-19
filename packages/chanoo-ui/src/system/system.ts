@@ -11,7 +11,8 @@ const globalStyles = globalCss({
     boxSizing: 'border-box'
   },
   body: { backgroundColor: '$background', lineHeight: 1, color: '$text' },
-  'ol, ul': { listStyle: 'none' }
+  'ol, ul': { listStyle: 'none' },
+  a: { textDecoration: 'none', color: 'inherit' }
 });
 
 export default globalStyles;
