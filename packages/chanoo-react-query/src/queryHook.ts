@@ -15,12 +15,12 @@ export function useData<Res, Req>(
     Res,
     [string, Req]
   >(key, () => api(key[1]), {
+    onError(err) {
+      if (onError) onError(err);
+    },
     retry: false,
     select(res) {
       return res?.data;
-    },
-    onError(err) {
-      if (onError) onError(err);
     },
     ...options
   });
@@ -36,12 +36,12 @@ export function useSendData<Res, Req>(
   const { mutate, ...useMutations } = useMutation<AxiosResponse<Res>, AxiosError<undefined>, Req>(
     api,
     {
-      retry: false,
-      onMutate() {},
-      onSuccess() {},
       onError(err, variables, context) {
         if (onError) onError(err, variables, context);
       },
+      onMutate() {},
+      onSuccess() {},
+      retry: false,
       ...options
     }
   );

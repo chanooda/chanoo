@@ -1,15 +1,15 @@
-import { styled } from '../theme';
+import { styled } from '../system';
 
 const Button = styled('button', {
+  '&:hover': {
+    backgroundColor: 'lightgray'
+  },
   all: 'unset',
   backgroundColor: '$primary',
   borderRadius: '9999px',
-  fontSize: '13px',
-  padding: '10px 15px',
   cursor: 'pointer',
-  '&:hover': {
-    backgroundColor: 'lightgray'
-  }
+  fontSize: '13px',
+  padding: '10px 15px'
 });
 
 export default Button;

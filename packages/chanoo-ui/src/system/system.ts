@@ -1,18 +1,18 @@
-import { globalCss } from '../theme';
+import { globalCss } from './stitches.config';
 
 const globalStyles = globalCss({
   '*': {
-    margin: 0,
-    padding: 0,
     border: 0,
-    fontSize: '100%',
-    font: 'inherit',
+    boxSizing: 'border-box',
     color: 'inherit',
-    boxSizing: 'border-box'
+    font: 'inherit',
+    fontSize: '100%',
+    margin: 0,
+    padding: 0
   },
-  body: { backgroundColor: '$background', lineHeight: 1, color: '$text' },
-  'ol, ul': { listStyle: 'none' },
-  a: { textDecoration: 'none', color: 'inherit' }
+  a: { color: 'inherit', textDecoration: 'none' },
+  body: { backgroundColor: '$background', color: '$text', lineHeight: 1 },
+  'ol, ul': { listStyle: 'none' }
 });
 
 export default globalStyles;

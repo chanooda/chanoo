@@ -23,6 +23,7 @@ export const keyframes = stitches.keyframes;
 export const getCssText = stitches.getCssText;
 export const theme = stitches.theme;
 export const config = stitches.config;
+export const createTheme = stitches.createTheme;
 
 export type StitchesConfig = typeof config;
 export type VariantProps<T extends { [key: string]: any; [key: symbol]: any }> =
@@ -36,6 +37,7 @@ export type StitchesTheme = typeof theme;
 // common theme types
 export type Spaces = StitchesConfig['theme']['space'];
 export type FontSizes = StitchesConfig['theme']['fontSizes'];
+export type Sizes = StitchesConfig['theme']['sizes'];
 // export type Fonts = StitchesConfig['theme']['fonts'];
 export type FontWeights = StitchesConfig['theme']['fontWeights'];
 export type LineHeights = StitchesConfig['theme']['lineHeights'];

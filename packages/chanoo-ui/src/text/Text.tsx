@@ -1,13 +1,17 @@
 import * as React from 'react';
 import {
   PolymorphicForwardRefExoticComponent,
-  PolymorphicPropsWithRef,
   PolymorphicPropsWithoutRef,
-  PolymorphicRef
+  PolymorphicRef,
+  VariantProps,
+  styled,
+  fontStyle,
+  fontStyleElement,
+  FontStyleKey
 } from '../system';
-import { VariantProps, styled, fontStyle, fontStyleElement, FontStyleKey } from '../theme';
 
 export const StyledText = styled('p', {
+  mt: '',
   variants: {
     fontType: { ...fontStyle }
   }
@@ -15,11 +19,11 @@ export const StyledText = styled('p', {
 
 export type StyledTextProps = VariantProps<typeof StyledText>;
 
-export type TextProps<T extends React.ElementType> = PolymorphicPropsWithRef<StyledTextProps, T>;
+export type TextProps<T extends React.ElementType> = PolymorphicPropsWithoutRef<StyledTextProps, T>;
 
 const Text: PolymorphicForwardRefExoticComponent<StyledTextProps, 'p'> = React.forwardRef(
   <T extends React.ElementType = 'p'>(
-    { as, fontType = 'text', children, ...props }: PolymorphicPropsWithoutRef<StyledTextProps, T>,
+    { as, fontType = 'text', children, ...props }: TextProps<T>,
     ref: PolymorphicRef<T>['ref']
   ) => {
     const covertAs = as || fontStyleElement[fontType as FontStyleKey]?.element;
@@ -35,6 +39,7 @@ const Text: PolymorphicForwardRefExoticComponent<StyledTextProps, 'p'> = React.f
       }
       return child;
     });
+
     return (
       <StyledText as={covertAs} fontType={fontType} ref={ref} {...props}>
         {childrenWithProps}

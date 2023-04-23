@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import Text from '../text/Text';
-import { fontStyle } from '../theme';
+import { fontStyle } from '../system';
 import { as } from './globalArgType';
 
 /**

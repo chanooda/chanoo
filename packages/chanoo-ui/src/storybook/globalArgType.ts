@@ -1,3 +1,5 @@
+import { gapStyle, heightStyle, sizeStyle, widthStyle } from '../system';
+
 export const asDetail = [
   'a',
   'abbr',
@@ -180,5 +182,87 @@ export const as = {
   description: 'element 명을 입력해 해당 element로 변경할 수 있습니다.',
   table: {
     type: { detail: asDetail.join(', '), summary: 'string' }
+  }
+};
+
+export const sizeArgTypes = {
+  h: {
+    control: 'select',
+    options: Object.keys(heightStyle)
+  },
+  size: {
+    control: 'select',
+    defaultValue: 20,
+    options: Object.keys(sizeStyle)
+  },
+  w: {
+    control: 'select',
+    options: Object.keys(widthStyle)
+  }
+};
+
+export const spaceArgTypes = {
+  gap: {
+    control: 'select',
+    options: Object.keys(gapStyle)
+  },
+  m: {
+    control: 'select',
+    options: Object.keys(gapStyle)
+  },
+  mb: {
+    control: 'select',
+    options: Object.keys(gapStyle)
+  },
+  ml: {
+    control: 'select',
+    options: Object.keys(gapStyle)
+  },
+  mr: {
+    control: 'select',
+    options: Object.keys(gapStyle)
+  },
+  mt: {
+    control: 'select',
+    options: Object.keys(gapStyle)
+  },
+  my: {
+    control: 'select',
+    options: Object.keys(gapStyle)
+  },
+  p: {
+    control: 'select',
+    options: Object.keys(gapStyle)
+  },
+  pb: {
+    control: 'select',
+    options: Object.keys(gapStyle)
+  },
+  pl: {
+    control: 'select',
+    options: Object.keys(gapStyle)
+  },
+  pr: {
+    control: 'select',
+    options: Object.keys(gapStyle)
+  },
+  pt: {
+    control: 'select',
+    options: Object.keys(gapStyle)
+  },
+  py: {
+    control: 'select',
+    options: Object.keys(gapStyle)
+  }
+};
+
+export const flexArgTypes = {
+  horizontal: {
+    control: { type: 'select' },
+    options: ['center', 'start', 'end']
+  },
+  vertical: {
+    control: { type: 'select' },
+    options: ['center', 'start', 'end']
   }
 };

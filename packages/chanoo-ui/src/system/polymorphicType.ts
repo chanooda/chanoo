@@ -1,11 +1,13 @@
 /// <reference types="react" />
 
+import { CSS } from './stitches.config';
+
 // Block external access to auxiliary types
 export {};
 
 type Merge<T, U> = Omit<T, keyof U> & U;
 
-type PropsWithAs<P, T extends React.ElementType> = P & { as?: T };
+type PropsWithAs<P, T extends React.ElementType> = P & { as?: T; css?: CSS };
 
 export type PolymorphicPropsWithoutRef<P, T extends React.ElementType> = Merge<
   T extends keyof JSX.IntrinsicElements

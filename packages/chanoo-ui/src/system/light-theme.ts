@@ -1,5 +1,3 @@
-import { ConfigType } from '@stitches/react/types/config';
-
 const lightTheme = {
   colors: {
     background: '$white',
