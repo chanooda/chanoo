@@ -12,8 +12,10 @@
   "license": "ISC",
   "dependencies": {
     "@stitches/react": "^1.2.8",
-    "@types/react": "^18.0.35",
-    "react": "^18.2.0"
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-icons": "^4.8.0",
+    "chanoo-libs": "*"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.21.4",
@@ -26,9 +28,10 @@
     "@storybook/react": "^7.0.4",
     "@storybook/react-webpack5": "^7.0.4",
     "@storybook/testing-library": "^0.0.14-next.2",
+    "@types/react": "^18.0.38",
+    "@types/react-dom": "^18.0.11",
     "eslint-config-custom": "*",
     "prop-types": "^15.8.1",
-    "react-dom": "^18.2.0",
     "storybook": "^7.0.4",
     "tsconfig": "*"
   }

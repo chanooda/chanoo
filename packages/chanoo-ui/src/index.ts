@@ -1,6 +1,6 @@
 // button
-export { default as Button } from './button';
-// export * from './button';
+export { default as Button } from './button/Button';
+export * from './button/Button';
 // text
 export { default as Text } from './text/Text';
 export * from './text/Text';
@@ -13,6 +13,17 @@ export * from './row/Row';
 // col
 export { default as Col } from './col/Col';
 export * from './col/Col';
-
+// modal
+export { default as Modal } from './modal/Modal';
+export * from './modal/Modal';
+// input
+export { default as Input } from './input/Input';
+export * from './input/Input';
+// label
+export { default as Label } from './label/Label';
+export * from './label/Label';
+// select
+export { default as Select } from './select/Select';
+export * from './select/Select';
 // system
 export * from './system';

@@ -6,6 +6,6 @@
     "resolveJsonModule": true,
     "noEmit": true
   },
-  "include": ["src"],
+  "include": ["src", "../next-app/components/Editor.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

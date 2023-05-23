@@ -2,7 +2,6 @@ module.exports = {
   env: {
     node: true
   },
-
   extends: [
     'turbo',
     'eslint:recommended',
@@ -14,7 +13,7 @@ module.exports = {
     'plugin:prettier/recommended'
   ],
 
-  ignorePatterns: ['.eslintrc.js', '**/*.config.*'],
+  ignorePatterns: ['.eslintrc.js', '**/*.config.*', './node_modules/*'],
 
   parser: '@typescript-eslint/parser',
 
@@ -67,12 +66,7 @@ module.exports = {
     ],
 
     // props spread 문법 사용
-    'react/jsx-props-no-spreading': [
-      2,
-      {
-        custom: 'ignore'
-      }
-    ],
+    'react/jsx-props-no-spreading': [0],
 
     // react props 정렬 설정
     'react/jsx-sort-props': [
@@ -86,8 +80,10 @@ module.exports = {
     'react/prop-types': [0],
     // jsx 문법 사용시에 react import
     'react/react-in-jsx-scope': 'off',
+
+    'react/require-default-props': [0]
     // 객체 key 알파벳 순 정렬
-    'sort-keys': ['error', 'asc', { caseSensitive: true }],
-    'sort-keys-fix/sort-keys-fix': 'warn'
+    // 'sort-keys': ['error', 'asc', { caseSensitive: true }]
+    // 'sort-keys-fix/sort-keys-fix': 'warn'
   }
 };

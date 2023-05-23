@@ -1,13 +1,23 @@
-/// <reference types="react" />
-
 import { CSS } from './stitches.config';
 
-// Block external access to auxiliary types
-export {};
+// 기존 작성한 ViewProps에서 as를 분리한다.
+type AsProp<T extends React.ElementType> = {
+  as?: T | React.ElementType;
+  css?: CSS;
+};
 
 type Merge<T, U> = Omit<T, keyof U> & U;
 
-type PropsWithAs<P, T extends React.ElementType> = P & { as?: T; css?: CSS };
+// 직관적인 이름을 붙여서 타입으로 만들어준다.
+export type PolymorphicRef<T extends React.ElementType> = React.ComponentPropsWithRef<T>['ref'];
+
+// 결합 타입을 만든다.
+export type PolymorphicComponentProps<T extends React.ElementType, Props = object> = AsProp<T> &
+  Merge<React.ComponentPropsWithoutRef<T>, Props> & {
+    ref?: PolymorphicRef<T>;
+  };
+
+type PropsWithAs<P, T extends React.ElementType> = P & { as?: T | React.ElementType; css?: CSS };
 
 export type PolymorphicPropsWithoutRef<P, T extends React.ElementType> = Merge<
   T extends keyof JSX.IntrinsicElements
@@ -23,12 +33,6 @@ export type PolymorphicPropsWithRef<P, T extends React.ElementType> = Merge<
   PropsWithAs<P, T>
 >;
 
-export type PolymorphicRef<T extends React.ElementType> = React.ComponentPropsWithRef<T>['ref'];
-
-// TODO:
-// - PolymorphicFunctionComponent
-// - PolymorphicVoidFunctionComponent (requires @types/react >=16.9.48)
-
 type PolymorphicExoticComponent<
   P = object,
   T extends React.ElementType = React.ElementType
@@ -43,18 +47,7 @@ type PolymorphicExoticComponent<
     ): React.ReactElement | null;
   }
 >;
-
 export type PolymorphicForwardRefExoticComponent<P, T extends React.ElementType> = Merge<
   React.ForwardRefExoticComponent<P & { [key: string]: unknown }>,
-  PolymorphicExoticComponent<P, T>
->;
-
-export type PolymorphicMemoExoticComponent<P, T extends React.ElementType> = Merge<
-  React.MemoExoticComponent<React.ComponentType<any>>,
-  PolymorphicExoticComponent<P, T>
->;
-
-export type PolymorphicLazyExoticComponent<P, T extends React.ElementType> = Merge<
-  React.LazyExoticComponent<React.ComponentType<any>>,
   PolymorphicExoticComponent<P, T>
 >;

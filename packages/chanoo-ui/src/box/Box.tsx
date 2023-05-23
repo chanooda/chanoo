@@ -18,9 +18,12 @@ export const StyledBox = styled('div', {
 
 export type StyledBoxProps = VariantProps<typeof StyledBox>;
 
-export type BoxProps<T extends React.ElementType> = PolymorphicPropsWithRef<StyledBoxProps, T>;
+export type BoxProps<T extends React.ElementType = 'div'> = PolymorphicPropsWithRef<
+  StyledBoxProps,
+  T
+>;
 
-const Box: PolymorphicForwardRefExoticComponent<StyledBoxProps, 'div'> = forwardRef(
+const Box: PolymorphicForwardRefExoticComponent<BoxProps, 'div'> = forwardRef(
   <T extends React.ElementType = 'div'>(
     { children, ...props }: BoxProps<T>,
     ref: PolymorphicRef<T>['ref']
@@ -33,6 +36,5 @@ const Box: PolymorphicForwardRefExoticComponent<StyledBoxProps, 'div'> = forward
   }
 );
 
-export default Box;
-
 Box.displayName = 'Box';
+export default Box;

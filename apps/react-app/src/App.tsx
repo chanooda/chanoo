@@ -4,7 +4,7 @@ function App() {
   globalStyles();
 
   return (
-    <Box css={{ bgColor: '$black', size: '$10' }}>
+    <Box h="screen">
       <Row />
     </Box>
   );

@@ -9,7 +9,15 @@ export const defaultColors = {
   ...gray,
   ...yellow,
 
-  primary: '$blue700'
+  primary: '$blue500',
+  primary100: '$blue100',
+  primary200: '$blue200',
+  primary300: '$blue300',
+  primary400: '$blue400',
+  primary600: '$blue600',
+  primary700: '$blue700',
+  primary800: '$blue800',
+  primary900: '$blue900'
 };
 
 export const defaultFontSizes = {
@@ -101,7 +109,8 @@ export const defaultSpaces = {
   9: '1.25rem',
   96: '24rem',
   full: '100%',
-  screen: '100vw'
+  screenH: '100vh',
+  screenW: '100vw'
 };
 
 export const defaultSizes = {
@@ -253,7 +262,7 @@ export const defaultUtils = {
     if (!value) {
       return {};
     }
-    return { alignItems: 'center', justifyContent: 'center' };
+    return { alignItems: 'center', display: 'flex', justifyContent: 'center' };
   },
   fs: (value: Stitches.PropertyValue<'fontSize'>) => ({
     fontSize: value

@@ -56,7 +56,7 @@ export const fontStyleElement: FontStyleElement = {
 
 export type SizeStyleKey = keyof Sizes;
 
-export type SizeStyle = Record<SizeStyleKey, CSS>;
+export type SizeStyle = Omit<Record<SizeStyleKey, CSS>, 'screenW' | 'screenH'> & { screen: CSS };
 
 export const sizeStyle: SizeStyle = {
   0: {
@@ -212,8 +212,8 @@ export const sizeStyle: SizeStyle = {
     w: '$min'
   },
   screen: {
-    h: '$screen',
-    w: '$screen'
+    h: '$screenH',
+    w: '$screenW'
   }
 };
 
@@ -450,18 +450,17 @@ export const heightStyle: SizeStyle = {
     h: '$max'
   },
   min: {
-    h: '$min',
-    w: '$min'
+    h: '$min'
   },
   screen: {
-    h: '$screen',
-    w: '$screen'
+    h: '$screenH',
+    w: '$screenW'
   }
 };
 
 export type SpaceKey = keyof Spaces;
 
-export type SpaceStyle = Omit<Record<SpaceKey, CSS>, 'screen'>;
+export type SpaceStyle = Omit<Record<SpaceKey, CSS>, 'screenW' | 'screenH'>;
 
 export const gapStyle: SpaceStyle = {
   0: {

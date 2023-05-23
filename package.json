@@ -12,14 +12,15 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
-  "devDependencies": {
-    "eslint": "^8.2.0",
-    "prettier": "latest",
-    "turbo": "latest",
-    "eslint-config-custom": "*"
-  },
   "engines": {
     "node": ">=14.0.0"
   },
-  "packageManager": "npm@9.6.2"
+  "packageManager": "npm@9.6.2",
+  "dependencies": {
+    "eslint": "^8.38.0",
+    "eslint-config-custom": "*",
+    "prettier": "latest",
+    "react-icons": "^4.8.0",
+    "turbo": "latest"
+  }
 }

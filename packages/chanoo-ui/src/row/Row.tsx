@@ -1,11 +1,5 @@
 import { forwardRef } from 'react';
-import {
-  VariantProps,
-  styled,
-  PolymorphicForwardRefExoticComponent,
-  PolymorphicPropsWithoutRef,
-  PolymorphicRef
-} from '../system';
+import { VariantProps, styled, PolymorphicRef, PolymorphicComponentProps } from '../system';
 import { StyledBox } from '../box/Box';
 
 export const StyledRow = styled(StyledBox, {
@@ -44,11 +38,15 @@ export const StyledRow = styled(StyledBox, {
   }
 });
 
-export type StyledRowProps = VariantProps<typeof StyledRow>;
+export type StyledRowProps = VariantProps<typeof StyledRow> & VariantProps<typeof StyledBox>;
 
-export type RowProps<T extends React.ElementType> = PolymorphicPropsWithoutRef<StyledRowProps, T>;
+export type RowProps<T extends React.ElementType> = PolymorphicComponentProps<T, StyledRowProps>;
 
-const Row: PolymorphicForwardRefExoticComponent<StyledRowProps, 'div'> = forwardRef(
+type RowComponent = <T extends React.ElementType = 'div'>(
+  props: RowProps<T>
+) => React.ReactElement | null;
+
+const Row = forwardRef(
   <T extends React.ElementType = 'div'>(
     { children, ...props }: RowProps<T>,
     ref: PolymorphicRef<T>['ref']
@@ -61,6 +59,6 @@ const Row: PolymorphicForwardRefExoticComponent<StyledRowProps, 'div'> = forward
   }
 );
 
-export default Row;
-
 Row.displayName = 'Row';
+
+export default Row as RowComponent;

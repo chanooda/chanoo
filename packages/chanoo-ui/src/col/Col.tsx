@@ -1,16 +1,19 @@
 import { forwardRef } from 'react';
 import {
-  VariantProps,
-  styled,
   PolymorphicForwardRefExoticComponent,
+  PolymorphicPropsWithRef,
   PolymorphicPropsWithoutRef,
-  PolymorphicRef
+  PolymorphicRef,
+  VariantProps,
+  styled
 } from '../system';
 import { StyledBox } from '../box/Box';
 
 export const StyledCol = styled(StyledBox, {
+  alignItems: 'flex-start',
   d: 'flex',
   flexDirection: 'column',
+  justifyContent: 'flex-start',
   variants: {
     flexC: {
       false: {
@@ -45,16 +48,16 @@ export const StyledCol = styled(StyledBox, {
   }
 });
 
-export type StyledColProps = VariantProps<typeof StyledCol>;
+export type StyledColProps = VariantProps<typeof StyledCol> & VariantProps<typeof StyledBox>;
 
-export type ColumnProps<T extends React.ElementType> = PolymorphicPropsWithoutRef<
+export type ColProps<T extends React.ElementType = 'div'> = PolymorphicPropsWithRef<
   StyledColProps,
   T
 >;
 
-const Col: PolymorphicForwardRefExoticComponent<StyledColProps, 'div'> = forwardRef(
+const Col: PolymorphicForwardRefExoticComponent<ColProps, 'div'> = forwardRef(
   <T extends React.ElementType = 'div'>(
-    { children, ...props }: ColumnProps<T>,
+    { children, ...props }: PolymorphicPropsWithoutRef<ColProps, T>,
     ref: PolymorphicRef<T>['ref']
   ) => {
     return (
@@ -65,6 +68,5 @@ const Col: PolymorphicForwardRefExoticComponent<StyledColProps, 'div'> = forward
   }
 );
 
-export default Col;
-
 Col.displayName = 'Col';
+export default Col;
