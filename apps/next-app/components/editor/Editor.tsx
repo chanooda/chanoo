@@ -92,10 +92,24 @@ export default function Editor() {
 
   return (
     <Box
-      css={{ '& > .w-md-editor': { height: '100% !important', zIndex: '300 !important' } }}
       data-color-mode="light"
-      h="screen"
-      w="screen"
+      h="full"
+      w="full"
+      css={{
+        '& > .w-md-editor': {
+          height: '100% !important',
+          zIndex: '300 !important',
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: 0
+        },
+        '& .w-md-editor-content': {
+          height: '100% !important'
+        },
+        '.w-md-editor-bar': {
+          display: 'none'
+        }
+      }}
     >
       {showUploadModal && (
         <Modal
@@ -144,7 +158,6 @@ export default function Editor() {
       )}
       <DynamicEditor
         extraCommands={[viewButton, commands.divider, upload]}
-        fullscreen
         value={editorValue}
         onChange={onChangeValue}
       />

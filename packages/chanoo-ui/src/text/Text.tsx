@@ -7,13 +7,15 @@ import {
   fontStyle,
   fontStyleElement,
   FontStyleKey,
-  PolymorphicPropsWithRef
+  PolymorphicPropsWithRef,
+  colorStyle
 } from '../system';
 
 export const StyledText = styled('p', {
   mt: '',
   variants: {
     fontType: { ...fontStyle },
+    color: { ...colorStyle },
     textAlign: {
       center: {
         textAlign: 'center'
