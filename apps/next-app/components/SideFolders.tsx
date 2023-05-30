@@ -1,5 +1,6 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable turbo/no-undeclared-env-vars */
-import React, { MouseEventHandler, useState } from 'react';
+import React, { MouseEventHandler, useState, useContext } from 'react';
 import {
   BsFillArrowRightCircleFill,
   Col,
@@ -13,26 +14,29 @@ import {
 import useSWR from 'swr';
 import { AxiosResponse } from 'chanoo-libs';
 import {
+  DeleteObjectCommand,
+  DeleteObjectCommandInput,
   ListObjectsCommand,
   ListObjectsCommandInput,
-  ListObjectsOutput,
   _Object
 } from '@aws-sdk/client-s3';
 import AddFolder from './AddFolder';
 import AddImage from './AddImage';
 import { DefaultRes } from '../types/defaultType';
-import { RootFoldersRes } from '../pages/folders';
-import { getChlidFolders, getRootFolders } from '../libs/client/folderApi';
+import { getFolders, getRootFolders } from '../libs/client/folderApi';
 import awsCient from '../libs/client/awsClient';
-import { FolderRes, FoldersRes } from '../pages/folders/[id]';
+import { cashImagesContext } from '../libs/client/imagesCashContext';
+import { FoldersRes, currentImagesContext } from '../libs/client/currentImageContext';
 
 interface SideFolderImageProps {
-  chooseImageKey?: string;
-  handleSetChooseImage: (imageKey?: string) => void;
   image: _Object;
+  type: 'sideBar' | 'page';
 }
-function SideFolderImage({ image, handleSetChooseImage, chooseImageKey }: SideFolderImageProps) {
+export function FolderImage({ image, type }: SideFolderImageProps) {
+  const { changeCashImages } = useContext(cashImagesContext);
+  const { currentImage, changeCurrentImage } = useContext(currentImagesContext);
   const imageUrl = `${process.env.NEXT_PUBLIC_CHANOO_AWS_S3_URL}${image.Key}`;
+  const folderName = image.Key?.split('/')[0];
 
   const copyMarkDownImageUrl = (imageUrlArg: string) => {
     navigator.clipboard.writeText(imageUrlArg);
@@ -42,9 +46,9 @@ function SideFolderImage({ image, handleSetChooseImage, chooseImageKey }: SideFo
     event.stopPropagation();
     event.preventDefault();
     if (event.button === 2) {
-      handleSetChooseImage(image.Key);
+      changeCurrentImage(image);
     } else {
-      handleSetChooseImage('');
+      changeCurrentImage();
       copyMarkDownImageUrl(`![](${imageUrl})`);
     }
   };
@@ -53,70 +57,155 @@ function SideFolderImage({ image, handleSetChooseImage, chooseImageKey }: SideFo
     window.open(imageUrlArg);
   };
 
+  const handleClickDeleteImageOption = async (imageKey?: string) => {
+    if (imageKey) {
+      const input: DeleteObjectCommandInput = {
+        Bucket: process.env.NEXT_PUBLIC_CHANOO_AWS_S3_BUCKET_NAME,
+        Key: imageKey
+      };
+      const command = new DeleteObjectCommand(input);
+      const response = await awsCient.send(command);
+      if (response.$metadata.httpStatusCode === 204) {
+        if (folderName) changeCashImages(folderName);
+      }
+    }
+  };
+
   return (
-    <Box
-      css={{
-        border: `1px solid $primary`,
-        width: '40%',
-        br: '$xs',
-        position: 'relative',
-        h: '$18',
-        cursor: 'pointer'
-      }}
-      onContextMenu={(e) => e.preventDefault()}
-      onMouseDown={handleImageClick}
-    >
-      <Image
-        css={{ objectFit: 'contain', w: '$full', h: '$full' }}
-        src={`${process.env.NEXT_PUBLIC_CHANOO_AWS_S3_URL}${image.Key}`}
-      />
-      {chooseImageKey === image.Key && (
-        <Col
-          as="ul"
+    <>
+      {type === 'sideBar' && (
+        <Box
           css={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            w: '$24',
-            p: '$4',
-            bgColor: '$white',
             border: `1px solid $primary`,
-            borderRadius: '$sm',
+            width: '40%',
+            br: '$xs',
+            position: 'relative',
+            h: '$18',
             cursor: 'pointer'
           }}
+          onContextMenu={(e) => e.preventDefault()}
+          onMouseDown={handleImageClick}
         >
-          <li
-            aria-hidden
-            onMouseDown={(e) => e.stopPropagation()}
-            onClick={() => {
-              handleClickBigSizeOption(imageUrl);
-            }}
-          >
-            크게 보기
-          </li>
+          <Image
+            css={{ objectFit: 'contain', w: '$full', h: '$full' }}
+            src={`${process.env.NEXT_PUBLIC_CHANOO_AWS_S3_URL}${image.Key}`}
+          />
+          {currentImage?.Key === image.Key && (
+            <Col
+              as="ul"
+              gap="4"
+              css={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, 0%)',
+                w: '$24',
+                p: '$4',
+                bgColor: '$white',
+                border: `1px solid $primary`,
+                borderRadius: '$sm',
+                cursor: 'pointer',
+                zIndex: '$10'
+              }}
+            >
+              <Box
+                aria-hidden
+                as="li"
+                onMouseDown={(e) => e.stopPropagation()}
+                onClick={() => {
+                  handleClickBigSizeOption(imageUrl);
+                }}
+              >
+                크게 보기
+              </Box>
+              <Box
+                aria-hidden
+                as="li"
+                onMouseDown={(e) => e.stopPropagation()}
+                onClick={() => {
+                  handleClickDeleteImageOption(image.Key);
+                }}
+              >
+                삭제
+              </Box>
+            </Col>
+          )}
+        </Box>
+      )}
+      {type === 'page' && (
+        <Col
+          css={{ border: `1px solid $primary`, br: '$md', position: 'relative' }}
+          h="32"
+          p="4"
+          w="52"
+          onContextMenu={(e) => e.preventDefault()}
+          onMouseDown={handleImageClick}
+        >
+          <Image
+            css={{ objectFit: 'contain' }}
+            h="full"
+            src={`${process.env.NEXT_PUBLIC_CHANOO_AWS_S3_URL}${image.Key}`}
+            w="full"
+          />
+          {currentImage?.Key === image.Key && (
+            <Col
+              as="ul"
+              gap="4"
+              css={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, 0%)',
+                w: '$24',
+                p: '$4',
+                bgColor: '$white',
+                border: `1px solid $primary`,
+                borderRadius: '$sm',
+                cursor: 'pointer',
+                zIndex: '$10'
+              }}
+            >
+              <Box
+                aria-hidden
+                as="li"
+                onMouseDown={(e) => e.stopPropagation()}
+                onClick={() => {
+                  handleClickBigSizeOption(imageUrl);
+                }}
+              >
+                크게 보기
+              </Box>
+              <Box
+                aria-hidden
+                as="li"
+                onMouseDown={(e) => e.stopPropagation()}
+                onClick={() => {
+                  handleClickDeleteImageOption(image.Key);
+                }}
+              >
+                삭제
+              </Box>
+            </Col>
+          )}
         </Col>
       )}
-    </Box>
+    </>
   );
 }
 
 interface SideFolderProps {
-  changeCurrentFolder: (folder: FolderRes | undefined) => void;
-  currentFolder?: FoldersRes;
-  folder: RootFoldersRes;
+  folder: FoldersRes;
 }
-function SideFolder({ folder, currentFolder, changeCurrentFolder }: SideFolderProps) {
-  const [images, setImages] = useState<ListObjectsOutput['Contents']>([]);
-  const [chooseImageKey, setChooseImageKey] = useState<string | undefined>('');
-
-  const handleSetChooseImage = (imageKey?: string) => {
-    setChooseImageKey(imageKey);
-  };
+function SideFolder({ folder }: SideFolderProps) {
+  const { cashImages, changeCashImages } = useContext(cashImagesContext);
+  const { changeCurrentImage, changeCurrentFolder, currentFolder } =
+    useContext(currentImagesContext);
 
   const { data: rootChildFolder } = useSWR<AxiosResponse<DefaultRes<FoldersRes>>>(
-    currentFolder && currentFolder.id === folder.id ? `/api/folders/${folder.id}` : null,
-    () => getChlidFolders({ id: Number(folder.id) }),
+    !cashImages[folder.name] && currentFolder && currentFolder.id === folder.id
+      ? `/api/folders/${folder.id}`
+      : null,
+    () => getFolders({ id: Number(folder.id) }),
     {
       onSuccess: async (res) => {
         const input: ListObjectsCommandInput = {
@@ -126,7 +215,7 @@ function SideFolder({ folder, currentFolder, changeCurrentFolder }: SideFolderPr
         const command = new ListObjectsCommand(input);
         const response = await awsCient.send(command);
         if (response.Contents) {
-          setImages(response.Contents);
+          changeCashImages(folder.name, response.Contents);
         }
       }
     }
@@ -134,12 +223,12 @@ function SideFolder({ folder, currentFolder, changeCurrentFolder }: SideFolderPr
 
   const onClickFolder = () => {
     if (currentFolder && currentFolder.id === folder.id) {
-      changeCurrentFolder(undefined);
+      changeCurrentFolder();
+      changeCurrentImage();
       return;
     }
     changeCurrentFolder(folder);
   };
-
   return (
     <Col w="full">
       <Row
@@ -160,57 +249,47 @@ function SideFolder({ folder, currentFolder, changeCurrentFolder }: SideFolderPr
         <AiOutlineFolder size="20px" />
         <Text>{folder?.name}</Text>
       </Row>
-      {currentFolder?.id === folder.id && images && images?.length > 0 && (
-        <Row
-          css={{ flexWrap: 'wrap' }}
-          gap="10"
-          horizontal="start"
-          mt="4"
-          vertical="center"
-          w="full"
-        >
-          {rootChildFolder?.data?.data?.child?.map((childFolder) => (
-            <SideFolder
-              changeCurrentFolder={changeCurrentFolder}
-              currentFolder={currentFolder}
-              folder={childFolder}
-              key={childFolder.id}
-            />
-          ))}
-          {images?.map((image) => (
-            <SideFolderImage
-              chooseImageKey={chooseImageKey}
-              handleSetChooseImage={handleSetChooseImage}
-              image={image}
-              key={image.Key}
-            />
-          ))}
-        </Row>
-      )}
+      {currentFolder?.id === folder.id &&
+        cashImages &&
+        cashImages[folder.name] &&
+        (cashImages[folder.name] as any)?.length > 0 && (
+          <Row
+            css={{ flexWrap: 'wrap' }}
+            gap="10"
+            horizontal="start"
+            mt="4"
+            vertical="center"
+            w="full"
+          >
+            {rootChildFolder?.data?.data?.child?.map((childFolder) => (
+              <SideFolder folder={childFolder} key={childFolder.id} />
+            ))}
+            {cashImages[folder.name]?.map((image) => (
+              <FolderImage image={image} key={image.Key} type="sideBar" />
+            ))}
+          </Row>
+        )}
     </Col>
   );
 }
 
 export default function SideFolders() {
   const [sideBarshow, setSideBarshow] = useState(false);
-  const [currentFolder, setCurrentFolder] = useState<FoldersRes | undefined>(undefined);
 
-  const { data: rootFolders } = useSWR<AxiosResponse<DefaultRes<RootFoldersRes[]>>>(
+  const { data: rootFolders } = useSWR<AxiosResponse<DefaultRes<FoldersRes[]>>>(
     '/api/folders',
     getRootFolders,
     {
-      onSuccess: async (data) => {
+      onSuccess: async () => {
         const input: ListObjectsCommandInput = {
           Bucket: process.env.NEXT_PUBLIC_CHANOO_AWS_S3_BUCKET_NAME || '',
           Prefix: ''
         };
         const command = new ListObjectsCommand(input);
-        const response = await awsCient.send(command);
+        await awsCient.send(command);
       }
     }
   );
-
-  const changeCurrentFolder = (folder: FoldersRes | undefined) => setCurrentFolder(folder);
 
   const handleClickShowButton = () => {
     setSideBarshow((prev) => !prev);
@@ -233,16 +312,11 @@ export default function SideFolders() {
           <Col gap="10" h="full" p="4" w="60">
             <Col gap="4" w="full">
               <AddFolder />
-              <AddImage currentFolderName={currentFolder?.name} />
+              <AddImage />
             </Col>
             <Col gap={2} w="full">
               {rootFolders?.data?.data?.map((folder) => (
-                <SideFolder
-                  changeCurrentFolder={changeCurrentFolder}
-                  currentFolder={currentFolder}
-                  folder={folder}
-                  key={folder.id}
-                />
+                <SideFolder folder={folder} key={folder.id} />
               ))}
             </Col>
           </Col>

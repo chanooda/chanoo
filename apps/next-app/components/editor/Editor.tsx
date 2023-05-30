@@ -1,7 +1,7 @@
 import '@uiw/react-md-editor/markdown-editor.css';
 import '@uiw/react-markdown-preview/markdown.css';
 import React, { useState, useContext } from 'react';
-import { Box, Button, Col, Input, Modal, Select, Text } from 'chanoo-ui';
+import { Box, Button, Col, Input, Modal, Text } from 'chanoo-ui';
 import { EditorContext, PreviewType, commands } from '@uiw/react-md-editor';
 import dynamic from 'next/dynamic';
 import { useForm } from 'chanoo-libs';
@@ -52,7 +52,8 @@ function ViewButton() {
 }
 
 interface UploadForm {
-  category: string;
+  category?: string;
+  series?: string;
   title: string;
 }
 
@@ -125,31 +126,27 @@ export default function Editor() {
                 size="md"
                 {...register('title')}
               />
-              {/* <Select
-                fullWidth
-                label="카테고리"
-                {...register('category', {
-                  value: '',
-                  onChange(event) {
-                    const { selectValue } = event.target;
-                    setValue('category', selectValue);
-                  }
-                })}
-              >
-                <Select.Option value="">선택</Select.Option>
-                <Select.Option value="1">테스트</Select.Option>
-              </Select> */}
               <Input
-                label="카테고리"
-                placeholder="카테고리를 입력해주세요."
+                label="시리즈"
+                placeholder="시리즈를 입력해주세요."
                 size="md"
-                {...register('category')}
+                {...register('series')}
                 datalistOption={[
                   { value: 'react', text: 'react' },
                   { value: 'nextjs', text: 'nextjs' }
                 ]}
               />
             </Col>
+            <Input
+              label="태그"
+              placeholder="태그를 입력해주세요."
+              size="md"
+              {...register('category')}
+              datalistOption={[
+                { value: 'react', text: 'react' },
+                { value: 'nextjs', text: 'nextjs' }
+              ]}
+            />
             <Button fullWidth type="submit">
               확인
             </Button>

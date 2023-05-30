@@ -1,17 +1,18 @@
 /* eslint-disable turbo/no-undeclared-env-vars */
+import React, { useState, ChangeEvent, FormEvent, useContext } from 'react';
 import { Box, Button, Col, File, Image, Modal, Row, Text } from 'chanoo-ui';
-import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { PutObjectCommand, PutObjectCommandInput } from '@aws-sdk/client-s3';
 import awsCient from '../libs/client/awsClient';
+import { cashImagesContext } from '../libs/client/imagesCashContext';
+import { currentImagesContext } from '../libs/client/currentImageContext';
 
-interface AddImageProps {
-  currentFolderName?: string;
-}
-
-export default function AddImage({ currentFolderName }: AddImageProps) {
+export default function AddImage() {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [ImageList, setImageList] = useState<FileList>();
   const [imageUrlList, setImageUrlList] = useState<string[]>([]);
+
+  const { changeCashImages } = useContext(cashImagesContext);
+  const { currentFolder, changeCurrentImage } = useContext(currentImagesContext);
 
   const handleChangeImage = (event: ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;
@@ -37,7 +38,7 @@ export default function AddImage({ currentFolderName }: AddImageProps) {
       fileArray.forEach((file) => {
         const params: PutObjectCommandInput = {
           Bucket: process.env.NEXT_PUBLIC_CHANOO_AWS_S3_BUCKET_NAME,
-          Key: currentFolderName ? `${currentFolderName}/${file.name}` : '',
+          Key: currentFolder ? `${currentFolder?.name}/${file.name}` : '',
           Body: file,
           ContentType: file.type,
           ContentDisposition: 'inline'
@@ -47,8 +48,10 @@ export default function AddImage({ currentFolderName }: AddImageProps) {
         promiseList.push(imageUploadPormise);
       });
     }
-    const res = await Promise.all(promiseList).then(() => {
+    await Promise.all(promiseList).then(() => {
       handleCloseUploadModal();
+      if (currentFolder) changeCashImages(currentFolder.name);
+      changeCurrentImage();
     });
   };
 

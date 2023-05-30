@@ -10,28 +10,19 @@ import { getRootFolders } from '../../libs/client/folderApi';
 import AddFolder from '../../components/AddFolder';
 import awsCient from '../../libs/client/awsClient';
 import AddImage from '../../components/AddImage';
-
-export interface RootFoldersRes {
-  id: number;
-  name: string;
-  parentId: null | number;
-}
+import { FoldersRes } from '../../libs/client/currentImageContext';
 
 export default function Index() {
-  const { data: rootFolders } = useSWR<AxiosResponse<DefaultRes<RootFoldersRes[]>>>(
-    '/api/folders',
-    getRootFolders,
-    {
-      onSuccess: async (data) => {
-        const input: ListObjectsCommandInput = {
-          Bucket: process.env.NEXT_PUBLIC_CHANOO_AWS_S3_BUCKET_NAME || '',
-          Prefix: ''
-        };
-        const command = new ListObjectsCommand(input);
-        const response = await awsCient.send(command);
-      }
+  const { data } = useSWR<AxiosResponse<DefaultRes<FoldersRes[]>>>('/api/folders', getRootFolders, {
+    onSuccess: async () => {
+      const input: ListObjectsCommandInput = {
+        Bucket: process.env.NEXT_PUBLIC_CHANOO_AWS_S3_BUCKET_NAME || '',
+        Prefix: ''
+      };
+      const command = new ListObjectsCommand(input);
+      await awsCient.send(command);
     }
-  );
+  });
 
   return (
     <Col css={{ position: 'relative' }} h="full" p="4" w="full">
@@ -40,7 +31,7 @@ export default function Index() {
           <AddImage />
           <AddFolder />
         </Col>
-        {rootFolders?.data?.data?.map((rootFolder) => (
+        {data?.data?.data?.map((rootFolder) => (
           <Link href={`/folders/${rootFolder?.id}`} key={rootFolder?.id}>
             <Col
               css={{ border: `1px solid $primary`, br: '$md' }}

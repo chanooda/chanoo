@@ -7,8 +7,8 @@ export const getRootFolders = () => {
 interface GetChildFoldersREQ {
   id: number;
 }
-export const getChlidFolders = (req: GetChildFoldersREQ) => {
-  return axios.get(`/folders/${req.id}`);
+export const getFolders = (req?: GetChildFoldersREQ) => {
+  return axios.get(req ? `/folders/${req.id}` : '/folders');
 };
 
 interface AddRootFolderREQ {
