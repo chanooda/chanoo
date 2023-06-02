@@ -52,7 +52,8 @@ function ViewButton() {
 }
 
 interface UploadForm {
-  category: string;
+  category?: string;
+  series?: string;
   title: string;
 }
 
@@ -92,10 +93,24 @@ export default function Editor() {
 
   return (
     <Box
-      css={{ '& > .w-md-editor': { height: '100% !important', zIndex: '300 !important' } }}
       data-color-mode="light"
-      h="screen"
-      w="screen"
+      h="full"
+      w="full"
+      css={{
+        '& > .w-md-editor': {
+          height: '100% !important',
+          zIndex: '300 !important',
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: 0
+        },
+        '& .w-md-editor-content': {
+          height: '100% !important'
+        },
+        '.w-md-editor-bar': {
+          display: 'none'
+        }
+      }}
     >
       {showUploadModal && (
         <Modal
@@ -111,31 +126,18 @@ export default function Editor() {
                 size="md"
                 {...register('title')}
               />
-              {/* <Select
-                fullWidth
-                label="카테고리"
-                {...register('category', {
-                  value: '',
-                  onChange(event) {
-                    const { selectValue } = event.target;
-                    setValue('category', selectValue);
-                  }
-                })}
-              >
-                <Select.Option value="">선택</Select.Option>
-                <Select.Option value="1">테스트</Select.Option>
-              </Select> */}
               <Input
-                label="카테고리"
-                placeholder="카테고리를 입력해주세요."
+                label="시리즈"
+                placeholder="시리즈를 입력해주세요."
                 size="md"
-                {...register('category')}
+                {...register('series')}
                 datalistOption={[
                   { value: 'react', text: 'react' },
                   { value: 'nextjs', text: 'nextjs' }
                 ]}
               />
             </Col>
+            <Col />
             <Button fullWidth type="submit">
               확인
             </Button>
@@ -144,7 +146,6 @@ export default function Editor() {
       )}
       <DynamicEditor
         extraCommands={[viewButton, commands.divider, upload]}
-        fullscreen
         value={editorValue}
         onChange={onChangeValue}
       />

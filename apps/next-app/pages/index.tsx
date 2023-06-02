@@ -1,11 +1,13 @@
-import { Box } from 'chanoo-ui';
+import { Row } from 'chanoo-ui';
 import dynamic from 'next/dynamic';
+import SideFolders from '../components/SideFolders';
 
 export default function Web() {
-  const DynamicEditor = dynamic(() => import('../components/Editor'));
+  const DynamicEditor = dynamic(() => import('../components/editor/Editor'));
   return (
-    <Box h="screen">
+    <Row h="full" w="full">
+      <SideFolders />
       <DynamicEditor />
-    </Box>
+    </Row>
   );
 }

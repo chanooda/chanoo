@@ -1,0 +1,44 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Folder {
+  id    Int     @id @default(autoincrement())
+  name  String?
+  parentId Int?
+  parent Folder? @relation("ParentChildFolder", fields: [parentId], references: [id] , onDelete: NoAction, onUpdate: NoAction)
+  child Folder[] @relation("ParentChildFolder")
+  
+  @@index([parentId])
+}
+
+model Series{
+  id    Int     @id @default(autoincrement())
+  name  String  
+  writes Writes[]
+}
+
+model Tags{
+  id    Int     @id @default(autoincrement())
+  name String
+  writes Writes[]
+}
+
+model Writes{
+  id    Int     @id @default(autoincrement())
+  title  String
+  series Series? @relation(fields: [seriesId], references: [id])
+  seriesId Int?
+  tags Tags[]
+  content String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([seriesId])
+}

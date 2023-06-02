@@ -1,4 +1,5 @@
-import { Spaces, CSS, Sizes } from './stitches.config';
+import { defaultColors } from './defaultConfig';
+import { Spaces, CSS, Sizes, Colors } from './stitches.config';
 
 export type FontStyleKey = 'header1' | 'header2' | 'header3' | 'header4' | 'text' | 'caption';
 
@@ -53,6 +54,21 @@ export const fontStyleElement: FontStyleElement = {
     element: 'p'
   }
 };
+
+export type ColorStyleKey = keyof Colors;
+export type ColorStyle = Record<ColorStyleKey, CSS>;
+export const colorStyle: { [key: string]: CSS } = {};
+export const bgColorStyle: { [key: string]: CSS } = {};
+Object.keys(defaultColors).forEach((colorKey) => {
+  colorStyle[colorKey] = {
+    color: (defaultColors as Record<ColorStyleKey, string>)[colorKey as ColorStyleKey]
+  };
+});
+Object.keys(defaultColors).forEach((colorKey) => {
+  bgColorStyle[colorKey] = {
+    backgroundColor: (defaultColors as Record<ColorStyleKey, string>)[colorKey as ColorStyleKey]
+  };
+});
 
 export type SizeStyleKey = keyof Sizes;
 
@@ -533,40 +549,40 @@ export const gapStyle: SpaceStyle = {
     gap: '$5'
   },
   52: {
-    w: '$52'
+    gap: '$52'
   },
   56: {
-    w: '$56'
+    gap: '$56'
   },
   6: {
-    w: '$6'
+    gap: '$6'
   },
   60: {
-    w: '$60'
+    gap: '$60'
   },
   64: {
-    w: '$64'
+    gap: '$64'
   },
   7: {
-    w: '$7'
+    gap: '$7'
   },
   72: {
-    w: '$72'
+    gap: '$72'
   },
   8: {
-    w: '$8'
+    gap: '$8'
   },
   80: {
-    w: '$80'
+    gap: '$80'
   },
   9: {
-    w: '$9'
+    gap: '$9'
   },
   96: {
-    w: '$96'
+    gap: '$96'
   },
   full: {
-    w: '$full'
+    gap: '$full'
   }
 };
 

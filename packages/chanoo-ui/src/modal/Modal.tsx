@@ -6,11 +6,22 @@ import Row from '../row/Row';
 import Box from '../box/Box';
 
 export const Overlay = styled('div', {
-  position: 'fixed',
   zIndex: '$max',
-  width: '$screenW',
-  height: '$screenH',
-  backgroundColor: 'rgba(0,0,0,0.5)'
+  width: '$full',
+  height: '$full',
+  backgroundColor: 'rgba(0,0,0,0.5)',
+  left: 0,
+  top: 0,
+  variants: {
+    isGlobal: {
+      true: {
+        position: 'fixed'
+      },
+      false: {
+        position: 'absolute'
+      }
+    }
+  }
 });
 
 export const StyledModal = styled(StyledCol, {
@@ -32,15 +43,16 @@ export type ModalProps<T extends React.ElementType> = PolymorphicPropsWithoutRef
   T
 > & {
   closeButtonClickHandler?: () => void;
+  isGlobal?: boolean;
 };
 
 const Modal = forwardRef(
   <T extends React.ElementType = 'div'>(
-    { closeButtonClickHandler, children, ...props }: ModalProps<T>,
+    { closeButtonClickHandler, children, isGlobal = true, ...props }: ModalProps<T>,
     ref: PolymorphicRef<T>['ref']
   ) => {
     return (
-      <Overlay>
+      <Overlay isGlobal={isGlobal}>
         <StyledModal {...props} ref={ref}>
           {closeButtonClickHandler && (
             <Row mb="4" vertical="end" w="full">

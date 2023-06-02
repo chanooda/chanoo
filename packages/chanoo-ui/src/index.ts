@@ -25,5 +25,15 @@ export * from './label/Label';
 // select
 export { default as Select } from './select/Select';
 export * from './select/Select';
+// file
+export { default as File } from './file/File';
+export * from './file/File';
+// image
+export { default as Image } from './image/Image';
+export * from './image/Image';
+
 // system
 export * from './system';
+
+export * from 'react-icons/ai';
+export * from 'react-icons/bs';

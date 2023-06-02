@@ -43,6 +43,9 @@ export const StyledCol = styled(StyledBox, {
       },
       start: {
         jc: 'flex-start'
+      },
+      'space-between': {
+        jc: 'space-between'
       }
     }
   }

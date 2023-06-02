@@ -4,6 +4,7 @@ import {
   PolymorphicPropsWithRef,
   PolymorphicRef,
   VariantProps,
+  bgColorStyle,
   sizesStyle,
   spaceStyle,
   styled
@@ -12,7 +13,10 @@ import {
 export const StyledBox = styled('div', {
   variants: {
     ...sizesStyle,
-    ...spaceStyle
+    ...spaceStyle,
+    bgColor: {
+      ...bgColorStyle
+    }
   }
 });
 
