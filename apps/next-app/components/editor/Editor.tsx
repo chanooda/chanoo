@@ -1,7 +1,7 @@
 import '@uiw/react-md-editor/markdown-editor.css';
 import '@uiw/react-markdown-preview/markdown.css';
 import React, { useState, useContext } from 'react';
-import { Box, Button, Col, Input, Modal, Text } from 'chanoo-ui';
+import { Box, Button, Col, Input, Modal, Select, Text } from 'chanoo-ui';
 import { EditorContext, PreviewType, commands } from '@uiw/react-md-editor';
 import dynamic from 'next/dynamic';
 import { useForm } from 'chanoo-libs';
@@ -137,16 +137,7 @@ export default function Editor() {
                 ]}
               />
             </Col>
-            <Input
-              label="태그"
-              placeholder="태그를 입력해주세요."
-              size="md"
-              {...register('category')}
-              datalistOption={[
-                { value: 'react', text: 'react' },
-                { value: 'nextjs', text: 'nextjs' }
-              ]}
-            />
+            <Col />
             <Button fullWidth type="submit">
               확인
             </Button>

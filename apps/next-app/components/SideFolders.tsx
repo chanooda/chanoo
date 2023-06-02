@@ -111,6 +111,7 @@ export function FolderImage({ image, type }: SideFolderImageProps) {
               <Box
                 aria-hidden
                 as="li"
+                w="full"
                 onMouseDown={(e) => e.stopPropagation()}
                 onClick={() => {
                   handleClickBigSizeOption(imageUrl);
@@ -121,6 +122,7 @@ export function FolderImage({ image, type }: SideFolderImageProps) {
               <Box
                 aria-hidden
                 as="li"
+                w="full"
                 onMouseDown={(e) => e.stopPropagation()}
                 onClick={() => {
                   handleClickDeleteImageOption(image.Key);
@@ -168,6 +170,7 @@ export function FolderImage({ image, type }: SideFolderImageProps) {
               <Box
                 aria-hidden
                 as="li"
+                w="full"
                 onMouseDown={(e) => e.stopPropagation()}
                 onClick={() => {
                   handleClickBigSizeOption(imageUrl);
@@ -178,6 +181,7 @@ export function FolderImage({ image, type }: SideFolderImageProps) {
               <Box
                 aria-hidden
                 as="li"
+                w="full"
                 onMouseDown={(e) => e.stopPropagation()}
                 onClick={() => {
                   handleClickDeleteImageOption(image.Key);

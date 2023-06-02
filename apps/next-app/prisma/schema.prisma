@@ -20,24 +20,25 @@ model Folder {
 
 model Series{
   id    Int     @id @default(autoincrement())
-  name String  
-  writes Write[]
+  name  String  
+  writes Writes[]
 }
 
 model Tags{
   id    Int     @id @default(autoincrement())
   name String
-  writes Write[]
+  writes Writes[]
 }
 
-model Write{
+model Writes{
   id    Int     @id @default(autoincrement())
-  title  String?
+  title  String
   series Series? @relation(fields: [seriesId], references: [id])
   seriesId Int?
   tags Tags[]
-  tagsId Int?
+  content String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   
-  @@index([tagsId])
   @@index([seriesId])
 }
