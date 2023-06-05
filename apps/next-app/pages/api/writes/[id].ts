@@ -10,7 +10,11 @@ async function getHandler(req: NextApiRequest, res: NextApiResponse) {
       },
       include: {
         series: true,
-        tags: true
+        writeTags: {
+          include: {
+            tags: true
+          }
+        }
       }
     });
     res.status(200).json({ message: 'success', status: 200, data: writes });

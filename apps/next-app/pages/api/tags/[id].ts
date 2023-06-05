@@ -7,9 +7,6 @@ async function getHandler(req: NextApiRequest, res: NextApiResponse) {
     const tags = await prisma.tags.findFirst({
       where: {
         id: Number(id)
-      },
-      include: {
-        writes: true
       }
     });
     res.status(200).json({ message: 'success', status: 200, data: tags });

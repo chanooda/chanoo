@@ -2,11 +2,17 @@ import { NextApiResponse, NextApiRequest } from 'next';
 import prisma from '../../../libs/server/prisma';
 
 async function getHandler(req: NextApiRequest, res: NextApiResponse) {
+  const { tagId, seriesId } = req.query;
+
   try {
     const writes = await prisma.writes.findMany({
       include: {
         series: true,
-        tags: true
+        writeTags: {
+          include: {
+            tags: true
+          }
+        }
       }
     });
     res.status(200).json({ message: 'success', status: 200, data: writes });
@@ -18,18 +24,23 @@ async function getHandler(req: NextApiRequest, res: NextApiResponse) {
 
 async function postHandler(req: NextApiRequest, res: NextApiResponse) {
   const { title, content, seriesId, tagsId } = req.body;
-  console.log(tagsId);
   try {
-    const writes = await prisma.writes.create({
+    const write = await prisma.writes.create({
       data: {
         title,
         content,
-        seriesId,
-        tags: {
-          connect: tagsId.map((tagId: number) => ({ id: tagId }))
-        }
+        seriesId
       }
     });
+    if (write) {
+      const writesTags = await prisma.writesTags.createMany({
+        data: tagsId.map((tagId: string) => ({
+          tagId,
+          writeId: write.id
+        }))
+      });
+    }
+
     res.status(200).json({ status: 200, message: 'success' });
   } catch (e) {
     console.error('Request Error', e);
