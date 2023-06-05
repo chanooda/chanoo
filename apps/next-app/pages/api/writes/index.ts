@@ -4,6 +4,8 @@ import prisma from '../../../libs/server/prisma';
 async function getHandler(req: NextApiRequest, res: NextApiResponse) {
   const { tagId, seriesId } = req.query;
 
+  console.log(tagId);
+
   try {
     const writes = await prisma.writes.findMany({
       include: {
@@ -12,6 +14,22 @@ async function getHandler(req: NextApiRequest, res: NextApiResponse) {
           include: {
             tags: true
           }
+        }
+      },
+      where: {
+        AND: {
+          ...(tagId && {
+            writeTags: {
+              some: {
+                tagId: {
+                  equals: Number(tagId)
+                }
+              }
+            }
+          }),
+          ...(seriesId && {
+            seriesId: Number(seriesId)
+          })
         }
       }
     });
@@ -25,21 +43,23 @@ async function getHandler(req: NextApiRequest, res: NextApiResponse) {
 async function postHandler(req: NextApiRequest, res: NextApiResponse) {
   const { title, content, seriesId, tagsId } = req.body;
   try {
-    const write = await prisma.writes.create({
-      data: {
-        title,
-        content,
-        seriesId
+    prisma.$transaction(async (tx) => {
+      const write = await tx.writes.create({
+        data: {
+          title,
+          content,
+          seriesId
+        }
+      });
+      if (write && tagsId) {
+        const writesTags = await tx.writesTags.createMany({
+          data: tagsId.map((tagId: string) => ({
+            tagId,
+            writeId: write.id
+          }))
+        });
       }
     });
-    if (write) {
-      const writesTags = await prisma.writesTags.createMany({
-        data: tagsId.map((tagId: string) => ({
-          tagId,
-          writeId: write.id
-        }))
-      });
-    }
 
     res.status(200).json({ status: 200, message: 'success' });
   } catch (e) {
