@@ -5,6 +5,9 @@ import { Box, Button, Col, Input, Modal, Select, Text } from 'chanoo-ui';
 import { EditorContext, PreviewType, commands } from '@uiw/react-md-editor';
 import dynamic from 'next/dynamic';
 import { useForm } from 'chanoo-libs';
+import useSWR from 'swr';
+import { getSeries, getTags } from '../../libs/client/folderApi';
+import { FullRes, SeriesRes, TagsRes } from '../../types/defaultType';
 
 const DynamicEditor = dynamic(() => import('@uiw/react-md-editor'));
 
@@ -61,6 +64,9 @@ export default function Editor() {
   const [editorValue, setEditorValue] = useState('');
   const [showUploadModal, setShowUploadModal] = useState(false);
   const { register, handleSubmit } = useForm<UploadForm>();
+
+  const { data: serieses } = useSWR<FullRes<SeriesRes[]>>('/api/series', getSeries);
+  const { data: tags } = useSWR<FullRes<TagsRes[]>>('/api/tags', getTags);
 
   const upload = {
     icon: <Upload onClick={() => setShowUploadModal(true)} />,
@@ -131,13 +137,15 @@ export default function Editor() {
                 placeholder="시리즈를 입력해주세요."
                 size="md"
                 {...register('series')}
-                datalistOption={[
-                  { value: 'react', text: 'react' },
-                  { value: 'nextjs', text: 'nextjs' }
-                ]}
+                datalistOption={serieses?.data?.data?.map((series) => ({
+                  name: series.name,
+                  value: series.name
+                }))}
               />
+              <Col w="full">
+                <Input />
+              </Col>
             </Col>
-            <Col />
             <Button fullWidth type="submit">
               확인
             </Button>

@@ -17,3 +17,11 @@ interface AddRootFolderREQ {
 export const addRootFolder = (req: AddRootFolderREQ) => {
   return axios.post('/folders', req);
 };
+
+export const getSeries = () => {
+  return axios.get('/series');
+};
+
+export const getTags = () => {
+  return axios.get('/tags');
+};
