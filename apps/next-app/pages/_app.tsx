@@ -2,7 +2,7 @@ import React from 'react';
 import type { AppProps } from 'next/app';
 import { globalStyles } from 'chanoo-ui';
 import { SWRConfig } from 'swr';
-import Layout from '../components/Layout';
+import Layout from '../components/admin/Layout';
 import CurrentImageContextProvider from '../libs/client/currentImageContext';
 import CashImageContextProvider from '../libs/client/imagesCashContext';
 

@@ -3,12 +3,12 @@ import React, { useContext } from 'react';
 import { Col, Row, AiOutlineFolder, theme } from 'chanoo-ui';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import AddImage from '../../components/AddImage';
-import AddFolder from '../../components/AddFolder';
-import { currentImagesContext } from '../../libs/client/currentImageContext';
-import { FolderImage } from '../../components/SideFolders';
-import { useGetImages } from '../../libs/client/useGetImages';
-import { cashImagesContext } from '../../libs/client/imagesCashContext';
+import AddImage from '../../../components/admin/AddImage';
+import AddFolder from '../../../components/admin/AddFolder';
+import { currentImagesContext } from '../../../libs/client/currentImageContext';
+import { FolderImage } from '../../../components/admin/SideFolders';
+import { useGetImages } from '../../../libs/client/useGetImages';
+import { cashImagesContext } from '../../../libs/client/imagesCashContext';
 
 export default function Index() {
   const id = useRouter().query?.id as string;

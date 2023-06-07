@@ -22,11 +22,11 @@ import {
 } from '@aws-sdk/client-s3';
 import AddFolder from './AddFolder';
 import AddImage from './AddImage';
-import { DefaultRes } from '../types/defaultType';
-import { getFolders, getRootFolders } from '../libs/client/folderApi';
-import awsCient from '../libs/client/awsClient';
-import { cashImagesContext } from '../libs/client/imagesCashContext';
-import { FoldersRes, currentImagesContext } from '../libs/client/currentImageContext';
+import { DefaultRes } from '../../types/defaultType';
+import { getFolders, getRootFolders } from '../../libs/client/folderApi';
+import awsCient from '../../libs/client/awsClient';
+import { cashImagesContext } from '../../libs/client/imagesCashContext';
+import { FoldersRes, currentImagesContext } from '../../libs/client/currentImageContext';
 
 interface SideFolderImageProps {
   image: _Object;

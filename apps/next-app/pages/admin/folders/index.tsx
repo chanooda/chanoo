@@ -5,12 +5,12 @@ import { ListObjectsCommand, ListObjectsCommandInput } from '@aws-sdk/client-s3'
 import Link from 'next/link';
 import useSWR from 'swr';
 import { AxiosResponse } from 'chanoo-libs';
-import { DefaultRes } from '../../types/defaultType';
-import { getRootFolders } from '../../libs/client/folderApi';
-import AddFolder from '../../components/AddFolder';
-import awsCient from '../../libs/client/awsClient';
-import AddImage from '../../components/AddImage';
-import { FoldersRes } from '../../libs/client/currentImageContext';
+import { DefaultRes } from '../../../types/defaultType';
+import { getRootFolders } from '../../../libs/client/folderApi';
+import AddFolder from '../../../components/admin/AddFolder';
+import awsCient from '../../../libs/client/awsClient';
+import AddImage from '../../../components/admin/AddImage';
+import { FoldersRes } from '../../../libs/client/currentImageContext';
 
 export default function Index() {
   const { data } = useSWR<AxiosResponse<DefaultRes<FoldersRes[]>>>('/api/folders', getRootFolders, {

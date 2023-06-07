@@ -2,9 +2,9 @@
 import React, { useState, ChangeEvent, FormEvent, useContext } from 'react';
 import { Box, Button, Col, File, Image, Modal, Row, Text } from 'chanoo-ui';
 import { PutObjectCommand, PutObjectCommandInput } from '@aws-sdk/client-s3';
-import awsCient from '../libs/client/awsClient';
-import { cashImagesContext } from '../libs/client/imagesCashContext';
-import { currentImagesContext } from '../libs/client/currentImageContext';
+import awsCient from '../../libs/client/awsClient';
+import { cashImagesContext } from '../../libs/client/imagesCashContext';
+import { currentImagesContext } from '../../libs/client/currentImageContext';
 
 export default function AddImage() {
   const [showUploadModal, setShowUploadModal] = useState(false);

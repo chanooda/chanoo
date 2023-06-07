@@ -1,13 +1,14 @@
 import '@uiw/react-md-editor/markdown-editor.css';
 import '@uiw/react-markdown-preview/markdown.css';
-import React, { useState, useContext } from 'react';
-import { Box, Button, Col, Input, Modal, Select, Text } from 'chanoo-ui';
+import React, { useState, useContext, KeyboardEvent } from 'react';
+import { Box, Button, Col, Input, Modal, Row, Select, Text } from 'chanoo-ui';
 import { EditorContext, PreviewType, commands } from '@uiw/react-md-editor';
 import dynamic from 'next/dynamic';
 import { useForm } from 'chanoo-libs';
 import useSWR from 'swr';
 import { getSeries, getTags } from '../../libs/client/folderApi';
 import { FullRes, SeriesRes, TagsRes } from '../../types/defaultType';
+import useMutation from '../../libs/client/useMutation';
 
 const DynamicEditor = dynamic(() => import('@uiw/react-md-editor'));
 
@@ -57,16 +58,23 @@ function ViewButton() {
 interface UploadForm {
   category?: string;
   series?: string;
+  tag: string;
+  tags: string;
   title: string;
 }
 
 export default function Editor() {
   const [editorValue, setEditorValue] = useState('');
   const [showUploadModal, setShowUploadModal] = useState(false);
-  const { register, handleSubmit } = useForm<UploadForm>();
+  const { register, handleSubmit, watch, setValue } = useForm<UploadForm>();
+  const { tag } = watch();
 
   const { data: serieses } = useSWR<FullRes<SeriesRes[]>>('/api/series', getSeries);
-  const { data: tags } = useSWR<FullRes<TagsRes[]>>('/api/tags', getTags);
+  const { data: tags, mutate } = useSWR<FullRes<TagsRes[]>>('/api/tags', getTags);
+  const {
+    mutate: addTags,
+    state: { loading: addTagsLoading }
+  } = useMutation('/api/tags', 'POST');
 
   const upload = {
     icon: <Upload onClick={() => setShowUploadModal(true)} />,
@@ -88,6 +96,24 @@ export default function Editor() {
 
   const CloseButtonClickHandler = () => {
     setShowUploadModal(false);
+  };
+
+  const handleInputOnKeyupEnter = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (!tag) return;
+    if (addTagsLoading) return;
+    if (event.code === 'Enter') {
+      addTags(
+        {
+          name: tag
+        },
+        {
+          onSuccess() {
+            mutate();
+            setValue('tag', '');
+          }
+        }
+      );
+    }
   };
 
   const handleUploadSubmit = handleSubmit(
@@ -142,11 +168,25 @@ export default function Editor() {
                   value: series.name
                 }))}
               />
-              <Col w="full">
-                <Input />
+              <Col gap="4" w="full">
+                <Input {...register('tag')} onKeyDown={handleInputOnKeyupEnter} />
+                <Row css={{ flexWrap: 'wrap' }} gap="4">
+                  {tags?.data?.data?.map((tagLabel) => (
+                    <label htmlFor={tagLabel.name} key={tagLabel.id}>
+                      {tagLabel.name}
+                      <input
+                        hidden
+                        id={tagLabel.name}
+                        type="checkbox"
+                        value={tagLabel.name}
+                        {...register('tags', {})}
+                      />
+                    </label>
+                  ))}
+                </Row>
               </Col>
             </Col>
-            <Button fullWidth type="submit">
+            <Button fullWidth type="button">
               확인
             </Button>
           </Col>

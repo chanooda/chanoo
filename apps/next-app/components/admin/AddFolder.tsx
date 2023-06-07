@@ -2,7 +2,7 @@ import { Button, Col, Input, Modal, Text } from 'chanoo-ui';
 import React, { ChangeEvent, useState } from 'react';
 import { useSWRConfig } from 'swr';
 import { useRouter } from 'next/router';
-import useMutation from '../libs/client/useMutation';
+import useMutation from '../../libs/client/useMutation';
 
 export default function AddFolder() {
   const id = useRouter().query?.id as string;
